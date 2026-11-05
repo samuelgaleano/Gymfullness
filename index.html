@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Gymfullness</title>
+    <meta name="description" content="Tu asistente de gimnasio: rutina guiada, descansos con aviso, registro de series por voz y progreso. Gratis." />
+    <meta name="theme-color" content="#07080c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#eef0f4" media="(prefers-color-scheme: light)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Gymfullness" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:title" content="Gymfullness — tu asistente de gym" />
+    <meta property="og:description" content="Entrena sin pensar: rutina guiada, descansos, registro por voz y progreso." />
+    <meta property="og:type" content="website" />
+    <style>
+      /* critical paint before CSS loads: no white flash */
+      html,body{background:#07080c;margin:0}
+      @media (prefers-color-scheme: light){html,body{background:#eef0f4}}
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
