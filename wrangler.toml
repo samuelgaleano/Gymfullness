@@ -1,0 +1,4 @@
+# Cloudflare Pages — static build in dist/ + Pages Functions in functions/ (optional AI coach).
+name = "gymfullness"
+compatibility_date = "2026-10-01"
+pages_build_output_dir = "dist"
