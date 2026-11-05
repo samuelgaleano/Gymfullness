@@ -103,8 +103,8 @@
   background: var(--glass);
 }
 .icon-btn--sm {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
 }
 .icon-btn--lg {
   width: 64px;
@@ -459,7 +459,8 @@
   margin-left: auto;
   font-weight: 700;
   color: var(--accent-text);
-  padding: var(--s-2) var(--s-3);
+  min-height: 44px;
+  padding: var(--s-2) var(--s-4);
   border-radius: var(--r-pill);
   flex: none;
 }
