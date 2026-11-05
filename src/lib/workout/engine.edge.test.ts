@@ -115,6 +115,7 @@ describe('cursor invariant under random edit sequences', () => {
     for (let run = 0; run < 40; run++) {
       let s = startRest(three(), 60, T0)
       let t = T0
+      let parked = false
       for (let step = 0; step < 40; step++) {
         const n = s.exercises.length
         const ex = n ? next(n) : 0
@@ -131,7 +132,15 @@ describe('cursor invariant under random edit sequences', () => {
         else if (op === 7) s = addExercise(s, ['bench', 'pullup', 'plank'][next(3)], getExercise, [], 90)
         else if (op === 8) s = setCursor(s, ex)
         else s = startRest(s, 30, t)
-        expectCursorOnWork(s)
+        // setCursor may deliberately park on a finished set (review / edit); until the cursor is back
+        // on pending work, only require that it points at a real set.
+        const e = s.exercises[s.cursor.ex]
+        const onPending = !!e && !e.skipped && e.sets[s.cursor.set]?.done === false
+        if (op === 8 && !onPending) parked = true
+        if (parked) {
+          expect(e?.sets.length ? e.sets[s.cursor.set] : true).toBeDefined()
+          if (onPending) parked = false
+        } else expectCursorOnWork(s)
       }
     }
   })

@@ -285,9 +285,11 @@ function suggestTime(perfs: Performance[], item: TargetItem, exercise: Exercise 
   const last = perfs[0]
   const secs = last ? last.sets.map((s) => s.seconds).filter(isPos) : []
   if (!last || !secs.length) {
+    // With history but no recorded seconds it is not really the first time.
+    const lead = last ? 'Apunta a' : 'Primera vez:'
     const reason = cardio
-      ? `Primera vez: ${formatSeconds(fallback)} a ritmo cómodo`
-      : `Primera vez: aguanta ${formatSeconds(fallback)} con buena técnica`
+      ? `${lead} ${formatSeconds(fallback)} a ritmo cómodo`
+      : `${lead} ${last ? '' : 'aguanta '}${formatSeconds(fallback)} con buena técnica`
     return { weight: null, reps: null, seconds: fallback, reason }
   }
   const lastTarget = last.entries.map((e) => e.target.targetSeconds).find(isPos) ?? fallback

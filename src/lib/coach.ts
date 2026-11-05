@@ -240,10 +240,15 @@ export function normalizeQuestion(s: string): string {
 
 /** Ordered: the first match wins (safety first, specific before generic). */
 const INTENT_RULES: readonly [CoachIntent, RegExp][] = [
-  ['soreness', /\b(agujeta|doms\b|adolorid|entumecid|tieso|dolor muscular|cuerpo cortado)/],
+  // Red flags first, even when soreness is also mentioned ("agujetas pero con un pinchazo").
   [
     'pain',
-    /\b(dolor|duele|duelen|dolio|lesion|lesione|lastim|molest|pinchazo|punzada|hernia|tendinitis|tendon|esguince|desgarr|hormigue|mareo|mareado|crujid|cruje|truena|tiron)/,
+    /\b(pinchazo|punzada|hormigue|entumecid|adormecid|mareo|maread|marearme|desmay|nausea|vomit|palpitac|falta de aire|me ahogo|dolor de pecho|dolor en el pecho|sangr|torci|me lesion|lesion|lastim)/,
+  ],
+  ['soreness', /\b(agujeta|doms\b|adolorid|tieso|dolor muscular|cuerpo cortado)/],
+  [
+    'pain',
+    /\b(dolor|duele|duelen|dolio|molest|hernia|tendinitis|tendon|esguince|desgarr|crujid|cruje|truena|tiron|luxa|fractur|inflam|hincha)/,
   ],
   ['breathing', /\b(respir|aire\b|inhal|exhal|espir|soplo|soplar|bracing)/],
   ['mistakes', /\b(error|errores|evitar|equivoc|lo hago mal|hago mal|fallos? comun)/],
