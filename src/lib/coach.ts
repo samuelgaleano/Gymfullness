@@ -1,7 +1,7 @@
 /**
  * "Coach" Q&A for the current exercise (technique doubts, pain, rest, weight…).
  *
- * - `askCoach` uses the optional serverless AI endpoint (`/api/coach`, Claude) when the deploy
+ * - `askCoach` uses the optional serverless AI endpoint (`/api/coach`, any provider) when the deploy
  *   has a key, and ALWAYS falls back to `localAnswer` (offline, rule-based, instant) on any
  *   problem: not configured, offline, timeout (15 s), rate limit, server error.
  * - `localAnswer` is pure and works with the exercise's own setup/cues/mistakes/breathing.

@@ -1,10 +1,10 @@
 // @vitest-environment node
 /**
- * Tests for the Vercel function api/coach.ts (Web-standard handler), with the upstream
+ * Tests for the Cloudflare Pages function functions/api/coach.ts (Web-standard handler), with the upstream
  * Anthropic API mocked. Lives in src/ so `npm test` runs it.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import handler from '../../api/coach'
+import handler from '../../functions/api/coach'
 
 const HOST = 'gym.example.app'
 let ipCounter = 0
@@ -17,7 +17,7 @@ function post(body: unknown, headers: Record<string, string> = {}): Request {
       'content-type': 'application/json',
       host: HOST,
       origin: `https://${HOST}`,
-      'x-real-ip': headers['x-real-ip'] ?? nextIp(),
+      'cf-connecting-ip': headers['cf-connecting-ip'] ?? headers['x-real-ip'] ?? nextIp(),
       ...headers,
     },
     body: typeof body === 'string' ? body : JSON.stringify(body),
@@ -175,5 +175,72 @@ describe('api/coach', () => {
     const res = await handler.fetch(post({ question: 'hola' }))
     expect(res.status).toBe(429)
     expect(await res.json()).toEqual({ error: 'daily_limit' })
+  })
+})
+
+describe('api/coach providers', () => {
+  const fetchMock = vi.fn<typeof fetch>()
+  const ask = () =>
+    handler.fetch(
+      new Request(`https://${HOST}/api/coach`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: `https://${HOST}`, 'cf-connecting-ip': nextIp() },
+        body: JSON.stringify({ question: '¿Cómo respiro en sentadilla?' }),
+      }),
+    )
+
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal('fetch', fetchMock)
+    for (const k of ['ANTHROPIC_API_KEY', 'GEMINI_API_KEY', 'COACH_API_KEY', 'COACH_BASE_URL', 'COACH_MODEL', 'COACH_PROVIDER', 'COACH_DAILY_LIMIT'])
+      vi.stubEnv(k, '')
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  it('is disabled with no keys', async () => {
+    const r = await handler.fetch(new Request(`https://${HOST}/api/coach`))
+    expect(await r.json()).toEqual({ enabled: false })
+  })
+
+  it('uses Gemini when only GEMINI_API_KEY is set', async () => {
+    vi.stubEnv('GEMINI_API_KEY', 'g-secret')
+    fetchMock.mockResolvedValue(
+      new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: 'Inhala al bajar.' }] }, finishReason: 'STOP' }] })),
+    )
+    const r = await ask()
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ answer: 'Inhala al bajar.' })
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(String(url)).toContain('generativelanguage.googleapis.com')
+    expect(String(url)).not.toContain('g-secret')
+    expect((init?.headers as Record<string, string>)['x-goog-api-key']).toBe('g-secret')
+  })
+
+  it('uses any OpenAI-compatible API (GLM, Groq, OpenRouter…) and strips <think>', async () => {
+    vi.stubEnv('COACH_API_KEY', 'k')
+    vi.stubEnv('COACH_BASE_URL', 'https://open.bigmodel.cn/api/paas/v4/')
+    vi.stubEnv('COACH_MODEL', 'glm-4.5-flash')
+    fetchMock.mockResolvedValue(
+      new Response(JSON.stringify({ choices: [{ message: { content: '<think>x</think>Respira hondo.' }, finish_reason: 'stop' }] })),
+    )
+    const r = await ask()
+    expect(await r.json()).toEqual({ answer: 'Respira hondo.' })
+    expect(String(fetchMock.mock.calls[0][0])).toBe('https://open.bigmodel.cn/api/paas/v4/chat/completions')
+  })
+
+  it('honors COACH_PROVIDER and hides upstream errors', async () => {
+    vi.stubEnv('ANTHROPIC_API_KEY', 'a')
+    vi.stubEnv('GEMINI_API_KEY', 'g')
+    vi.stubEnv('COACH_PROVIDER', 'gemini')
+    fetchMock.mockResolvedValue(new Response('quota exceeded for key g', { status: 429 }))
+    const r = await ask()
+    expect(r.status).toBe(503)
+    expect(await r.text()).not.toContain('quota')
+    expect(String(fetchMock.mock.calls[0][0])).toContain('generativelanguage')
   })
 })
