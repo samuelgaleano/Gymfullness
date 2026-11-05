@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'wouter'
+import { canNavigate } from './navGuard'
 import { Home, ListChecks, TrendingUp, User } from 'lucide-react'
 
 const TABS = [
@@ -13,7 +14,15 @@ export function TabBar() {
   return (
     <nav className="tabbar glass" aria-label="Navegación principal">
       {TABS.map(({ href, label, Icon, match }) => (
-        <Link key={href} href={href} className="tabbar__item" aria-current={match(path) ? 'page' : undefined}>
+        <Link
+          key={href}
+          href={href}
+          className="tabbar__item"
+          aria-current={match(path) ? 'page' : undefined}
+          onClick={(e) => {
+            if (!canNavigate(href)) e.preventDefault()
+          }}
+        >
           <Icon size={22} strokeWidth={2.2} />
           <span>{label}</span>
         </Link>

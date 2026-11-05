@@ -41,7 +41,8 @@ export default function SummaryScreen() {
 
   if (!session) {
     return (
-      <main className="screen screen--full sm">
+      // /history/:id keeps the tab bar (see FULLSCREEN in App.tsx), /summary/:id does not
+      <main className={`screen sm ${isHistory ? 'sm--tabs' : 'screen--full'}`}>
         <TopBar onBack={goBack} />
         <EmptyState
           title="No encontramos este entreno"

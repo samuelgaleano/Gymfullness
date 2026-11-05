@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useLocation, useRoute } from 'wouter'
-import { ChevronDown, Dumbbell, ExternalLink, Trophy } from 'lucide-react'
+import { ChevronDown, Dumbbell, ExternalLink, Trash2, Trophy } from 'lucide-react'
 import type { Exercise, WorkoutSession } from '@/lib/types'
 import { EQUIPMENT_LABEL, EXERCISES, MUSCLE_LABEL, videoQueryFor } from '@/data/exercises'
 import { useApp, useSessions } from '@/store/app'
@@ -8,7 +8,7 @@ import { alternatives } from '@/lib/recommend'
 import { exerciseHistory, isWorkingSet, personalRecords } from '@/lib/stats'
 import { convertWeight, formatWeight } from '@/lib/units'
 import { formatRelativeDay } from '@/lib/date'
-import { Button, Card, EmptyState, Stat, TopBar } from '@/ui'
+import { Button, Card, EmptyState, IconButton, Sheet, Stat, TopBar, toast } from '@/ui'
 import { LineChart } from '@/ui/charts'
 import { ExerciseBadges, ExerciseRow } from './ExerciseRow'
 import './exercises.css'
@@ -70,6 +70,7 @@ export default function ExerciseDetailScreen() {
   const unit = useApp((s) => s.settings.unit)
   const equipmentProfile = useApp((s) => s.profile.equipment)
   const sessions = useSessions()
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   const ex = useMemo(() => EXERCISES.find((e) => e.id === id) ?? custom.find((e) => e.id === id), [id, custom])
 
@@ -134,7 +135,16 @@ export default function ExerciseDetailScreen() {
 
   return (
     <main className="screen">
-      <TopBar onBack={back} />
+      <TopBar
+        onBack={back}
+        right={
+          ex.custom && (
+            <IconButton label="Eliminar ejercicio" onClick={() => setConfirmDelete(true)}>
+              <Trash2 size={20} />
+            </IconButton>
+          )
+        }
+      />
       <div className="ex-detail">
         <div>
           <h1 className="ex-detail__title">{ex.name}</h1>
@@ -239,6 +249,36 @@ export default function ExerciseDetailScreen() {
           </section>
         )}
       </div>
+
+      <Sheet
+        open={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        title="¿Eliminar este ejercicio?"
+        footer={
+          <div className="stack">
+            <Button
+              variant="danger"
+              size="lg"
+              block
+              onClick={() => {
+                useApp.getState().deleteCustomExercise(ex.id)
+                setConfirmDelete(false)
+                toast.show(`“${ex.name}” eliminado`)
+                navigate('/exercises', { replace: true })
+              }}
+            >
+              Eliminar ejercicio
+            </Button>
+            <Button variant="glass" size="lg" block onClick={() => setConfirmDelete(false)}>
+              Cancelar
+            </Button>
+          </div>
+        }
+      >
+        <p className="muted">
+          “{ex.name}” se quitará de tu biblioteca. Las series que ya registraste se conservan en tu historial, pero ya no aparecerá al armar rutinas.
+        </p>
+      </Sheet>
     </main>
   )
 }

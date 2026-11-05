@@ -26,7 +26,9 @@ export function TopBar({ title, onBack, right }: { title?: ReactNode; onBack?: (
       ) : (
         <span style={{ width: 48 }} />
       )}
-      <div className="topbar__title truncate">{title}</div>
+      <div className="topbar__title truncate" role="heading" aria-level={1}>
+        {title}
+      </div>
       <div style={{ minWidth: 48, display: 'flex', justifyContent: 'flex-end' }}>{right}</div>
     </div>
   )

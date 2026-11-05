@@ -121,7 +121,7 @@ export function ExerciseBlock(p: ExerciseBlockProps) {
             </button>
           )}
         </div>
-        <div className="wk-sets__list" role="list">
+        <div className="wk-sets__list" role="group" aria-label="Series">
           {se.sets.map((s, i) => {
             const current = i === info.setIndex
             const shown = current && !s.done ? values : s
@@ -136,7 +136,6 @@ export function ExerciseBlock(p: ExerciseBlockProps) {
               <button
                 key={s.id}
                 type="button"
-                role="listitem"
                 className={cls}
                 aria-label={label}
                 aria-current={current ? 'step' : undefined}

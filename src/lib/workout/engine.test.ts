@@ -519,6 +519,34 @@ describe('undoLastSet', () => {
   })
 })
 
+describe('updateSet · PR re-evaluation', () => {
+  const r = () => routine([item('bench', { sets: 3 })])
+  const history = [past(T0 - 3 * DAY, [{ id: 'bench', sets: [[80, 10]] }])] // e1RM 106.7
+
+  it('clears a stale PR flag when the edit no longer beats history', () => {
+    const s0 = createSession(r(), getExercise, history, 'kg', T0)
+    const pr = logSet(s0, { weight: 90, reps: 10 }, history, T0)
+    expect(pr.session.exercises[0].sets[0].isPR).toBe(true)
+    const edited = updateSet(pr.session, 0, 0, { weight: 60 }, history)
+    expect(edited.exercises[0].sets[0].isPR).toBeUndefined()
+  })
+
+  it('sets the PR flag when an edit beats history', () => {
+    const s0 = createSession(r(), getExercise, history, 'kg', T0)
+    const res = logSet(s0, { weight: 70, reps: 10 }, history, T0)
+    expect(res.session.exercises[0].sets[0].isPR).toBeUndefined()
+    const edited = updateSet(res.session, 0, 0, { weight: 90 }, history)
+    expect(edited.exercises[0].sets[0].isPR).toBe(true)
+  })
+
+  it('does not touch PR when no history is given or the set is not done', () => {
+    const s0 = createSession(r(), getExercise, history, 'kg', T0)
+    expect(updateSet(s0, 0, 0, { weight: 200 }, history).exercises[0].sets[0].isPR).toBeUndefined()
+    const pr = logSet(s0, { weight: 90, reps: 10 }, history, T0).session
+    expect(updateSet(pr, 0, 0, { rpe: 8 }, history).exercises[0].sets[0].isPR).toBe(true)
+  })
+})
+
 describe('updateSet / addSet / removeSet', () => {
   it('updateSet patches one set and nothing else', () => {
     const s = threeExercises()

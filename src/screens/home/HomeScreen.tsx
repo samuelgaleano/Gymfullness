@@ -10,6 +10,7 @@ import { formatClock, formatDate, formatDuration, formatRelativeDay, greeting, t
 import { formatVolume, formatWeight } from '@/lib/units'
 import { Button, Card, CardButton, Chip, EmptyState, Header, ProgressBar, ProgressRing, Sheet, Stepper, toast } from '@/ui'
 import { PlanWizard } from '../routines/PlanWizard'
+import { AssistantPill } from '../assistant'
 import { estimateMinutes, exerciseCountLabel, useStartWorkout } from '../routines/routineUtils'
 import { readSnooze, smartTip, snoozeWeightPrompt, weekDays, weightPromptDue } from './homeLogic'
 import './home.css'
@@ -158,6 +159,8 @@ export default function HomeScreen() {
             )}
           </div>
         )}
+
+        <AssistantPill />
 
         {/* ---------- Week ---------- */}
         {(plan || sessions.length > 0) && (

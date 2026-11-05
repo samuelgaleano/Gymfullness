@@ -8,6 +8,7 @@ import { formatClock } from '@/lib/date'
 import { muscleSets } from '@/lib/stats'
 import { suggestAddOns } from '@/lib/recommend'
 import { allExercises, getExercise, useApp, useRoutines } from '@/store/app'
+import { setNavGuard } from '@/ui/navGuard'
 import { Button, Card, EmptyState, Field, IconButton, Sheet, TopBar, toast } from '@/ui'
 import { ExercisePicker } from '../exercises/ExercisePicker'
 import { LIMITS, draftSignature, insertAt, itemFromExercise, moveItem, patchItem, toDraft, type Draft } from './editorLogic'
@@ -162,7 +163,27 @@ function Editor({ routine, isNew }: { routine: Routine; isNew: boolean }) {
     return () => window.removeEventListener('beforeunload', h)
   }, [dirty])
 
-  const goBack = () => navigate('/routines')
+  // Tab-bar navigation with unsaved edits: ask first, then continue to the tapped tab.
+  const pendingHref = useRef<string | null>(null)
+  useEffect(() => {
+    if (!dirty || saved.current) return
+    setNavGuard((href) => {
+      pendingHref.current = href
+      setConfirmLeave(true)
+      return false
+    })
+    return () => setNavGuard(null)
+  }, [dirty])
+
+  const stay = () => {
+    pendingHref.current = null
+    setConfirmLeave(false)
+  }
+  const goBack = () => {
+    const href = pendingHref.current
+    pendingHref.current = null
+    navigate(href ?? '/routines')
+  }
   const onBack = () => (dirty && !saved.current ? setConfirmLeave(true) : goBack())
 
   const setItems = useCallback((fn: (items: RoutineItem[]) => RoutineItem[]) => setDraft((d) => ({ ...d, items: fn(d.items) })), [])
@@ -337,11 +358,11 @@ function Editor({ routine, isNew }: { routine: Routine; isNew: boolean }) {
 
       <Sheet
         open={confirmLeave}
-        onClose={() => setConfirmLeave(false)}
+        onClose={stay}
         title="¿Salir sin guardar?"
         footer={
           <div className="rt-sheet-actions">
-            <Button variant="primary" size="lg" block onClick={() => setConfirmLeave(false)}>
+            <Button variant="primary" size="lg" block onClick={stay}>
               Seguir editando
             </Button>
             <Button

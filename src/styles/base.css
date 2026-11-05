@@ -69,7 +69,7 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--accent-text); /* --accent is too pale on the light theme */
   outline-offset: 2px;
   border-radius: var(--r-sm);
 }

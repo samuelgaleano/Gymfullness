@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Minus, Plus } from 'lucide-react'
 
+/** Spanish decimal comma for display (input still accepts both "," and "."). */
+const fmt = (v: number | null) => (v === null ? '' : String(v).replace('.', ','))
+
 export interface StepperProps {
   label: string
   value: number | null
@@ -17,8 +20,8 @@ export interface StepperProps {
 
 /** Big glanceable number with −/+ buttons; tap the number to type. */
 export function Stepper({ label, value, onChange, step = 1, min = 0, max = 9999, unit, decimals = 0, placeholder = '0', id }: StepperProps) {
-  const [draft, setDraft] = useState<string>(value === null ? '' : String(value))
-  useEffect(() => setDraft(value === null ? '' : String(value)), [value])
+  const [draft, setDraft] = useState<string>(fmt(value))
+  useEffect(() => setDraft(fmt(value)), [value])
 
   const clamp = (n: number) => Math.min(max, Math.max(min, n))
   const round = (n: number) => Number(n.toFixed(Math.max(decimals, String(step).split('.')[1]?.length ?? 0)))
@@ -32,7 +35,7 @@ export function Stepper({ label, value, onChange, step = 1, min = 0, max = 9999,
     if (t === '') return onChange(null)
     const n = Number(t)
     if (Number.isFinite(n)) onChange(round(clamp(n)))
-    else setDraft(value === null ? '' : String(value))
+    else setDraft(fmt(value))
   }
 
   return (
@@ -49,7 +52,7 @@ export function Stepper({ label, value, onChange, step = 1, min = 0, max = 9999,
           className="stepper__value num"
           inputMode={decimals > 0 || String(step).includes('.') ? 'decimal' : 'numeric'}
           value={draft}
-          placeholder={placeholder}
+          placeholder={placeholder.replace('.', ',')}
           onChange={(e) => setDraft(e.target.value)}
           onBlur={commit}
           onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}

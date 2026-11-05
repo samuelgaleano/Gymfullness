@@ -7,7 +7,7 @@ Todo corre gratis para pocos usuarios y se puede usar comercialmente.
 | Pieza | Servicio | Plan | Costo |
 |---|---|---|---|
 | App (PWA estática) | Cloudflare Pages | Free | $0, ancho de banda ilimitado, uso comercial permitido |
-| Entrenador IA (`/api/coach`) | Cloudflare Pages Functions | Free (100.000 peticiones/día) | $0 |
+| Entrenador IA (`/api/coach`) y asistente (`/api/agent`) | Cloudflare Pages Functions | Free (100.000 peticiones/día) | $0 |
 | Login con Google + copia en la nube | Firebase Auth + Firestore | Spark | $0 (límites muy por encima de pocos usuarios) |
 | IA del entrenador (opcional) | Gemini / GLM / Groq / Claude | ver abajo | $0 – centavos |
 
@@ -58,6 +58,52 @@ solo responde preguntas abiertas. Elige UN proveedor y agrega las variables como
 Opcional: `COACH_PROVIDER` (`anthropic`, `gemini` u `openai`) para forzar uno si hay varias claves;
 `COACH_DAILY_LIMIT` (p. ej. `200`) para limitar preguntas al día; `COACH_ALLOWED_ORIGINS` para dominios extra.
 Si el proveedor falla o se agota la cuota, la app responde con su entrenador sin internet.
+
+### 3b. Asistente con IA que "hace todo en la app" (opcional, mismas claves)
+
+El asistente (`/api/agent`) usa **las mismas variables** del entrenador: si ya configuraste la IA en el paso 3, ya funciona;
+no hay nada más que activar. Cómo está pensado para costar casi $0:
+
+1. **Capa local gratis (sin internet):** órdenes como «80 por 10», «siguiente», «deshacer», «descanso de 2 minutos»,
+   «registra mi peso 78», «qué entreno hoy», «cómo voy en press de banca», «añade dominadas», «cambia a libras» o dudas
+   de técnica se resuelven en el teléfono, sin llamar a ninguna IA.
+2. **Solo lo abierto va a la IA** («crea una rutina de pecho y tríceps»). El modelo propone acciones (herramientas) que el
+   **navegador ejecuta sobre los datos locales**; el servidor solo ve los mensajes de ese turno (≤ 12 mensajes, ≤ 24 KB), no
+   guarda nada y no tiene acceso a tu base de datos.
+3. Las acciones delicadas (terminar el entreno, crear rutinas, cambiar el plan o ajustes) piden **confirmación** en pantalla.
+4. Si la IA falla, se acaba la cuota o no hay clave, la app responde con lo que sabe hacer sin IA (nunca se queda en blanco).
+
+Variables opcionales (si no existen se usan las `COACH_*` equivalentes): `AGENT_PROVIDER`, `AGENT_MODEL`,
+`AGENT_DAILY_LIMIT` (tope diario por instancia del servidor), `AGENT_ALLOWED_ORIGINS`. Cada instalación además tiene un
+tope suave de **40 consultas con IA por día** (guardado en el teléfono; las órdenes locales no cuentan).
+
+Modelos por defecto: Claude `claude-haiku-5-5` (esfuerzo bajo, pensamiento desactivado, caché de prompt en instrucciones y
+herramientas) y Gemini `gemini-2.5-flash-lite` (capa gratuita). Para GLM/Groq/OpenRouter/DeepSeek elige un modelo que
+soporte *tool calling*. Límite por IP: 60 peticiones/hora. `COACH_BASE_URL` debe ser `https://…` (o `http://localhost`
+real); cualquier otra cosa se rechaza.
+
+**Costo estimado por consulta con IA** (medido: instrucciones ≈ 2.6 KB y 20 herramientas ≈ 8.2 KB, unos 3 300 tokens fijos
+que se cachean; contexto de la app + mensaje ≈ 350 tokens; el caché de Haiku 5.5 empieza en 512 tokens, así que aplica):
+
+| Concepto (Claude Haiku 5.5: US$0.10 entrada / US$0.50 salida por MTok, hasta 100 K de prompt) | Tokens | US$ |
+| --- | --- | --- |
+| Prefijo fijo con caché leído (0.1×) | 3 300 | 0.000033 |
+| Prefijo fijo sin caché (primer uso o tras 5 min: escritura 1.25×) | 3 300 | 0.00041 |
+| Contexto + mensaje (sin caché) | 350 | 0.000035 |
+| Salida de una llamada a herramienta o respuesta corta | 60–100 | 0.00003–0.00005 |
+| **Consulta típica (2 vueltas al modelo: acción + respuesta), caché caliente** | | **≈ 0.0003** |
+| Consulta típica con caché frío | | ≈ 0.0007 |
+| Peor caso (4 vueltas, caché frío) | | ≈ 0.002 |
+
+Es decir, unos **US$0.30 por cada 1 000 consultas** con caché caliente. Con el tope de 40 consultas/día por instalación,
+un usuario muy intensivo cuesta como máximo ≈ US$0.08/día y uno normal (≈ 10/día) ≈ US$0.003/día. Las órdenes locales
+(«80 por 10», «siguiente»…) cuestan US$0 y suelen ser la mayoría.
+
+**Gemini gratis (`gemini-2.5-flash-lite`):** sin costo, pero la capa gratuita tiene cuotas bajas por clave (del orden de
+15 peticiones/minuto y unos cientos o pocos miles por día; revisa los límites vigentes en Google AI Studio). Cada consulta
+usa 1–3 peticiones, así que alcanza para uso personal o un grupo pequeño; con muchos usuarios verás 429 (la app responde en
+modo básico). Además, en la capa gratuita Google puede usar los mensajes para mejorar sus productos: no pongas datos sensibles.
+Se activa con `GEMINI_API_KEY` (paso 3).
 
 ## 4. Desarrollo local
 

@@ -675,12 +675,21 @@ export function updateSet(
   exIndex: number,
   setIndex: number,
   patch: Partial<SetLog>,
+  history?: WorkoutSession[],
 ): WorkoutSession {
   const se = session.exercises[exIndex]
   const set = se?.sets[setIndex]
   if (!se || !set) return session
   const updated: SetLog = { ...set, ...patch, id: set.id }
-  return { ...session, exercises: replaceAt(session.exercises, exIndex, { ...se, sets: replaceAt(se.sets, setIndex, updated) }) }
+  let exercises = replaceAt(session.exercises, exIndex, { ...se, sets: replaceAt(se.sets, setIndex, updated) })
+  // Editing a logged set's numbers must re-run PR detection (a stale gold badge is a lie).
+  const touchesPR = 'weight' in patch || 'reps' in patch || 'seconds' in patch || 'isWarmup' in patch || 'done' in patch
+  if (history && touchesPR) {
+    delete updated.isPR
+    if (updated.done && detectPR(updated, session, exercises, exIndex, setIndex, history)) updated.isPR = true
+    exercises = replaceAt(session.exercises, exIndex, { ...se, sets: replaceAt(se.sets, setIndex, updated) })
+  }
+  return { ...session, exercises }
 }
 
 export function addSet(session: WorkoutSession, exIndex: number): WorkoutSession {

@@ -723,3 +723,13 @@ textarea.input {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--s-3);
 }
+
+/* Keyboard focus ring for text fields: their own :focus style only changes the border colour,
+   which is not enough contrast (WCAG 2.4.7 / 1.4.11), especially on the light theme. */
+.input:focus-visible,
+.pf-input:focus-visible,
+.pf-select:focus-visible,
+.stepper__value:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}

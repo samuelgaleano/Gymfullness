@@ -96,6 +96,7 @@ export interface AppState {
 
   // custom exercises
   upsertCustomExercise: (ex: Exercise) => void
+  deleteCustomExercise: (id: string) => void
 
   // body
   upsertBodyLog: (log: Omit<BodyLog, 'id' | 'updatedAt'> & { id?: ID }) => void
@@ -191,6 +192,7 @@ export const useApp = create<AppState>()(
             plan: st.plan ? { ...st.plan, routineIds: st.plan.routineIds.filter((x) => x !== id), updatedAt: now() } : null,
           })),
 
+        deleteCustomExercise: (id) => set((st) => ({ customExercises: st.customExercises.filter((e) => e.id !== id) })),
         upsertCustomExercise: (ex) => set((st) => ({ customExercises: upsertById(st.customExercises, { ...ex, custom: true }) })),
 
         upsertBodyLog: (log) =>
@@ -230,7 +232,7 @@ export const useApp = create<AppState>()(
           return res
         },
         undoLastSet: () => mutateActive((s) => engine.undoLastSet(s)),
-        updateActiveSet: (e, i, patch) => mutateActive((s) => engine.updateSet(s, e, i, patch)),
+        updateActiveSet: (e, i, patch) => mutateActive((s) => engine.updateSet(s, e, i, patch, history())),
         addSet: (e) => mutateActive((s) => engine.addSet(s, e)),
         removeSet: (e, i) => mutateActive((s) => engine.removeSet(s, e, i)),
         skipExercise: (e) => mutateActive((s) => engine.skipExercise(s, e)),

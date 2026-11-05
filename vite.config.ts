@@ -19,8 +19,10 @@ export default defineConfig({
         short_name: 'Gymfullness',
         description: 'Entrena sin pensar: rutina guiada, descansos, registro por voz y progreso.',
         lang: 'es',
-        theme_color: '#0b0d12',
-        background_color: '#0b0d12',
+        id: '/',
+        theme_color: '#07080c',
+        background_color: '#07080c',
+        categories: ['health', 'fitness', 'sports'],
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
@@ -33,17 +35,36 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2,webmanifest}'],
-        // only precache the latin font subsets (Spanish/English)
-        globIgnores: ['**/*-cyrillic*', '**/*-greek*', '**/*-vietnamese*'],
+        // The optional Firebase SDK (~270 KB, only used after "Continuar con Google") is not worth
+        // forcing on every install: it is cached on first use instead (runtimeCaching below).
+        globIgnores: ['**/firebase-sdk-*.js'],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => /\/assets\/firebase-sdk-[^/]+\.js$/.test(url.pathname),
+            handler: 'CacheFirst',
+            options: { cacheName: 'firebase-sdk', expiration: { maxEntries: 8 } },
+          },
+        ],
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api\//],
         cleanupOutdatedCaches: true,
+        // take control on first install so lazy screens work offline without a second visit
+        clientsClaim: true,
+        skipWaiting: true,
       },
     }),
   ],
   build: {
     target: 'es2022',
     chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      output: {
+        // Stable, recognizable name for the lazy Firebase SDK so the service worker can treat it specially.
+        manualChunks(id: string) {
+          if (/node_modules\/(@firebase|firebase)\//.test(id)) return 'firebase-sdk'
+        },
+      },
+    },
   },
   test: {
     environment: 'jsdom',

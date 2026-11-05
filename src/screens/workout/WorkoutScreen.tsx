@@ -23,7 +23,9 @@ import { OverviewSheet } from './OverviewSheet'
 import { EditSetSheet } from './EditSetSheet'
 import { DiscardSheet, FinishSheet, MenuSheet, NotesSheet } from './SessionSheets'
 import { WorkoutBottom } from './VoiceDock'
+import { AssistantWorkoutButton } from '@/screens/assistant'
 import { useVoice } from './useVoice'
+import { createTapGuard } from './tapGuard'
 import {
   kindOfExercise,
   lastDoneSet,
@@ -87,6 +89,7 @@ function Workout({ session, finishing }: { session: WorkoutSession; finishing: R
   const editsRef = useRef(edits)
   editsRef.current = edits
   const prTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const tapOk = useRef(createTapGuard()).current
 
   useWakeLock(settings.keepAwake)
   useEffect(() => {
@@ -336,7 +339,7 @@ function Workout({ session, finishing }: { session: WorkoutSession; finishing: R
   let primary: React.ReactNode
   if (resting) {
     primary = (
-      <Button variant="rest" size="xl" block onClick={() => useApp.getState().endRest()}>
+      <Button variant="rest" size="xl" block onClick={() => tapOk() && useApp.getState().endRest()}>
         Saltar descanso
       </Button>
     )
@@ -348,13 +351,13 @@ function Workout({ session, finishing }: { session: WorkoutSession; finishing: R
     )
   } else if (finished) {
     primary = (
-      <Button variant="primary" size="xl" block onClick={doFinish}>
+      <Button variant="primary" size="xl" block onClick={() => tapOk() && doFinish()}>
         Ver resumen
       </Button>
     )
   } else {
     primary = (
-      <Button variant="primary" size="xl" block icon={<Check size={30} strokeWidth={3} />} onClick={() => logCurrent()}>
+      <Button variant="primary" size="xl" block icon={<Check size={30} strokeWidth={3} />} onClick={() => tapOk() && logCurrent()}>
         Serie hecha
       </Button>
     )
@@ -428,7 +431,10 @@ function Workout({ session, finishing }: { session: WorkoutSession; finishing: R
         )}
       </div>
 
-      <WorkoutBottom voice={voice}>{primary}</WorkoutBottom>
+      <WorkoutBottom voice={voice}>
+        {primary}
+        <AssistantWorkoutButton />
+      </WorkoutBottom>
 
       {counting && se && (
         <RepCounter

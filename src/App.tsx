@@ -3,6 +3,7 @@ import { Route, Switch, Redirect, useLocation } from 'wouter'
 import { useApp } from '@/store/app'
 import { TabBar, Toaster, Spinner } from '@/ui'
 import { ActiveWorkoutPill } from '@/screens/workout/ActiveWorkoutPill'
+import { AssistantHost } from '@/screens/assistant'
 
 const HomeScreen = lazy(() => import('@/screens/home/HomeScreen'))
 const WelcomeScreen = lazy(() => import('@/screens/welcome/WelcomeScreen'))
@@ -72,6 +73,7 @@ export function App() {
       </div>
       {!fullscreen && <ActiveWorkoutPill />}
       {!fullscreen && <TabBar />}
+      <AssistantHost />
       <Toaster />
     </>
   )

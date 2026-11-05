@@ -289,10 +289,24 @@ async function callGemini(userText: string): Promise<Response | Finished> {
   return { text, truncated: c?.finishReason === 'MAX_TOKENS', refused: blocked }
 }
 
+/** https anywhere, plain http only for a real loopback host (not "localhost.evil.com"); no credentials in the URL. */
+function safeBaseUrl(raw: string): string | null {
+  let u: URL
+  try {
+    u = new URL(raw.trim())
+  } catch {
+    return null
+  }
+  if (u.username || u.password || u.search || u.hash) return null
+  const loopback = u.hostname === 'localhost' || u.hostname === '127.0.0.1' || u.hostname === '[::1]'
+  if (u.protocol === 'https:' || (u.protocol === 'http:' && loopback)) return u.toString().replace(/\/+$/, '')
+  return null
+}
+
 async function callOpenAICompatible(userText: string): Promise<Response | Finished> {
   const e = env()
-  const base = (e.COACH_BASE_URL as string).replace(/\/+$/, '')
-  if (!/^https:\/\//i.test(base) && !/^http:\/\/(localhost|127\.0\.0\.1)/i.test(base)) throw new Error('bad base url')
+  const base = safeBaseUrl(e.COACH_BASE_URL as string)
+  if (!base) throw new Error('bad base url')
   const res = await post(
     `${base}/chat/completions`,
     { authorization: `Bearer ${e.COACH_API_KEY as string}` },

@@ -24,8 +24,8 @@ const useToasts = create<ToastState>((set) => ({
   items: [],
   push: (t) => {
     const id = seq++
-    // keep at most 2 visible — newest wins
-    set((s) => ({ items: [...s.items.slice(-1), { duration: 3200, ...t, id }] }))
+    // one visible toast at a time (stacked toasts covered the header) — newest wins
+    set(() => ({ items: [{ duration: 3200, ...t, id }] }))
     return id
   },
   dismiss: (id) => set((s) => ({ items: s.items.filter((x) => x.id !== id) })),

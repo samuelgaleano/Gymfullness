@@ -44,6 +44,8 @@ import { Button, Card, Header, List, Segmented, Spinner, Switch, toast } from '@
 import { DAYS_OPTIONS, EQUIPMENT_OPTIONS, GOAL_OPTIONS, LEVEL_OPTIONS } from '@/lib/planner'
 import { downloadBlob } from '@/lib/export'
 import { speak, isTTSSupported } from '@/lib/voice'
+import { getAiUsage, AI_DAILY_CAP } from '@/lib/agent'
+import { setAssistantPref, useAssistantUi } from '@/screens/assistant'
 import { toDateKey } from '@/lib/date'
 import { parseImportText, type ImportSummary } from './importValidate'
 import { ImportSheet, DeleteSheet, InstallSheet, type ImportMode } from './ProfileSheets'
@@ -496,6 +498,8 @@ export default function ProfileScreen() {
     } else setInstallOpen(true)
   }
 
+  const aiOn = useAssistantUi((x) => x.useAI)
+  const voiceReplies = useAssistantUi((x) => x.voiceReplies)
   const speechOptions = useMemo(() => speechLangOptions(settings.speechLang), [settings.speechLang])
   const year = new Date().getFullYear()
 
@@ -567,6 +571,14 @@ export default function ProfileScreen() {
             <Button variant="glass" size="sm" onClick={testVoice}>
               Reproducir
             </Button>
+          </Row>
+        </Group>
+
+        <Group title="Asistente">
+          <SwitchRow icon={<Sparkles size={18} />} title="Usar IA" sub="Para pedidos abiertos. Apagada, solo entiendo comandos básicos" checked={aiOn} onChange={(v) => setAssistantPref('useAI', v)} />
+          <SwitchRow icon={<Volume2 size={18} />} title="Respuestas en voz alta" sub="Cuando le hablas, te contesta hablando" checked={voiceReplies} onChange={(v) => setAssistantPref('voiceReplies', v)} />
+          <Row icon={<Hourglass size={18} />} title="Consultas con IA hoy" sub={`Hasta ${AI_DAILY_CAP} al día en este dispositivo`}>
+            <span className="num">{getAiUsage().used}/{AI_DAILY_CAP}</span>
           </Row>
         </Group>
 
