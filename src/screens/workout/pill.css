@@ -1,0 +1,71 @@
+/* Active workout pill (floats above the tab bar). Class prefix: pill */
+.pill,
+.pill.glass {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--safe-bottom) + var(--tabbar-h) + 22px);
+  width: min(calc(100% - 32px), calc(var(--app-max) - 32px));
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 0 var(--s-4) 0 var(--s-2);
+  border-radius: var(--r-pill);
+  z-index: 41;
+  overflow: hidden;
+  background: var(--glass-solid);
+  transition: background var(--dur-2) var(--ease), transform var(--dur-1) var(--ease);
+}
+.pill:active {
+  transform: translateX(-50%) scale(0.98);
+}
+.pill__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--text-on-accent);
+  flex: none;
+}
+.pill--rest .pill__icon {
+  background: var(--rest);
+  color: var(--text-on-accent);
+}
+.pill__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.2;
+}
+.pill__name {
+  font-weight: 600;
+  font-size: var(--fs-md);
+}
+.pill__sub {
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+.pill--rest .pill__sub {
+  color: var(--rest);
+}
+.pill__time {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  flex: none;
+}
+.pill--rest .pill__time {
+  color: var(--rest);
+}
+.pill__bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--rest);
+  transition: width 300ms linear;
+}

@@ -1,0 +1,231 @@
+/* Home ("Hoy") — class prefix home- */
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  align-items: stretch;
+  border-radius: var(--r-xl);
+}
+.home-hero > .chip {
+  align-self: flex-start;
+}
+.home-hero__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.home-hero__sub {
+  margin-top: var(--s-1);
+  color: var(--text-2);
+  font-size: var(--fs-md);
+}
+.home-hero__meta {
+  display: flex;
+  gap: var(--s-5);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+.home-hero__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.home-hero__elapsed {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+}
+
+.home-quick {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+  margin-top: calc(var(--s-3) * -1);
+}
+.home-quick:has(> :only-child) {
+  grid-template-columns: 1fr;
+}
+
+/* ---------- Week ---------- */
+.home-week {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+.home-week__top {
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+}
+.home-ring__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  line-height: 1;
+}
+.home-ring__of {
+  font-size: var(--fs-md);
+  color: var(--text-3);
+  font-weight: 600;
+}
+.home-week__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+.home-week__headline {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: 2px;
+}
+.home-strip {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--s-1);
+}
+.home-strip__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) 0;
+  border-radius: var(--r-md);
+}
+.home-strip__day.is-today {
+  background: var(--glass-strong);
+}
+.home-strip__day.is-future {
+  opacity: 0.55;
+}
+.home-strip__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-2);
+}
+.home-strip__day.is-today .home-strip__label {
+  color: var(--text);
+}
+.home-strip__dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--glass-border);
+  background: var(--glass);
+  color: var(--text-on-accent);
+}
+.home-strip__dot.is-trained {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- Tip ---------- */
+.home-tip {
+  display: flex;
+  gap: var(--s-3);
+  align-items: flex-start;
+  padding: 0 var(--s-2);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+.home-tip__icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  background: var(--pr-soft);
+  color: var(--pr);
+}
+.home-tip p {
+  padding-top: 5px;
+}
+
+/* ---------- Last session ---------- */
+.home-last {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.home-last__name {
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  letter-spacing: -0.01em;
+}
+.home-last__when {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+.home-last__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-5);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+.home-last__stats b {
+  color: var(--text);
+  font-weight: 700;
+}
+.home-last__prs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* ---------- Weight ---------- */
+.home-weight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+.home-weight__title {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.home-weight__sub {
+  font-size: var(--fs-sm);
+  margin-top: 2px;
+}
+
+/* ---------- Pick sheet ---------- */
+.home-pick {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding-bottom: var(--s-2);
+}
+.home-pick__item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 68px;
+}
+.home-pick__name {
+  display: block;
+  font-weight: 700;
+  font-size: var(--fs-md);
+}
+.home-pick__meta {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.home-quick .btn > svg {
+  flex-shrink: 0;
+}

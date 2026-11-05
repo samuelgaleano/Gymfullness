@@ -1,0 +1,428 @@
+/* ================= Progress screen (pg-) ================= */
+
+.pg-seg {
+  margin-bottom: var(--s-5);
+}
+.pg .seg__opt {
+  padding: 0 var(--s-1);
+  font-size: 13px;
+  min-height: 44px;
+}
+.pg-pane {
+  animation: pg-in var(--dur-3) var(--ease) both;
+}
+@keyframes pg-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+.pg .section-title {
+  font-size: var(--fs-xs);
+}
+
+.pg-note {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+.pg-note--center {
+  text-align: center;
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+}
+.pg-more {
+  align-self: center;
+  min-height: 40px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-2);
+}
+.pg-more:active {
+  background: var(--glass-strong);
+}
+
+/* ---------- Resumen: hero stats ---------- */
+.pg-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+.pg-stat {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pg-stat + .pg-stat {
+  padding-left: var(--s-3);
+  border-left: 1px solid var(--glass-border);
+}
+.pg-stat__value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+.pg-stat__value small {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0;
+}
+.pg-stat__flame {
+  align-self: center;
+  margin-left: 4px;
+  color: var(--pr);
+}
+.pg-stat__label {
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+/* ---------- Balance ---------- */
+.pg-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+.pg-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pg-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+}
+.pg-legend .pg-legend__tick {
+  width: 2px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--text);
+  opacity: 0.7;
+}
+.pg-insight {
+  display: flex;
+  gap: var(--s-2);
+  align-items: flex-start;
+  padding: var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--glass);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  line-height: 1.4;
+}
+.pg-insight svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--rest);
+}
+
+/* ---------- Récords ---------- */
+.pg-pr-icon {
+  color: var(--pr);
+}
+.pg-pr-value {
+  font-weight: 700;
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+.pg-pr-value small {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  font-weight: 500;
+}
+
+/* ---------- Cuerpo ---------- */
+.pg-weight {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+.pg-weight__label {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  font-weight: 500;
+}
+.pg-weight__value {
+  font-family: var(--font-display);
+  font-size: 60px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+.pg-weight__value small {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0;
+}
+.pg-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px 6px 8px;
+  border-radius: var(--r-pill);
+  background: var(--glass-strong);
+  color: var(--text-2);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+.pg-delta small {
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-3);
+  margin-left: 2px;
+}
+.pg-delta--good {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+.pg-ranges {
+  display: flex;
+  gap: var(--s-2);
+}
+.pg-ranges button.chip {
+  min-width: 52px;
+  min-height: 44px;
+  justify-content: center;
+}
+.pg-meas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+.pg-meas__card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.pg-meas__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+.pg-meas__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.pg-meas__value small {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.pg-meas__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-top: 2px;
+}
+.pg-meas__delta {
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+  font-weight: 600;
+  min-width: 0;
+}
+.pg-log {
+  padding-right: var(--s-2);
+}
+
+/* ---------- Sheet: añadir medidas ---------- */
+.pg-sheet {
+  padding-bottom: var(--s-2);
+}
+.pg-sheet__weight .stepper__value {
+  font-size: 56px;
+}
+.pg-sheet__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-4) var(--s-3);
+}
+.pg-sheet__grid .stepper__value {
+  font-size: 26px;
+}
+.pg-sheet__grid .stepper__btn {
+  width: 38px;
+  height: 48px;
+}
+
+/* ---------- Ejercicios ---------- */
+.pg-search {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 48px;
+  padding: 0 var(--s-2) 0 var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text-3);
+}
+.pg-search:focus-within {
+  border-color: var(--accent);
+  background: var(--glass-strong);
+}
+.pg-search__input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  background: none;
+  border: 0;
+  outline: none;
+  font-size: var(--fs-md);
+  color: var(--text);
+}
+.pg-search__input::-webkit-search-cancel-button {
+  display: none;
+}
+.pg-ex {
+  min-height: 64px;
+}
+.pg-ex__val {
+  text-align: right;
+  flex: none;
+  min-width: 78px;
+}
+.pg-ex__last {
+  font-weight: 700;
+  font-size: var(--fs-md);
+}
+.pg-ex__best {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+/* ---------- Sheet: ejercicio ---------- */
+.pg-exsheet {
+  padding-bottom: var(--s-2);
+}
+.pg-exsheet__big {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+.pg-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.pg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.pg-table th {
+  text-align: left;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-3);
+  padding: 0 var(--s-2) var(--s-2) 0;
+}
+.pg-table td {
+  padding: var(--s-3) var(--s-2) var(--s-3) 0;
+  border-top: 1px solid var(--glass-border);
+  white-space: nowrap;
+}
+.pg-table th:last-child,
+.pg-table td:last-child {
+  text-align: right;
+  padding-right: 0;
+}
+
+/* ---------- Historial ---------- */
+.pg-hist {
+  min-height: 68px;
+}
+.pg-hist__date {
+  width: 46px;
+  height: 50px;
+  border-radius: var(--r-sm);
+  background: var(--glass-strong);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.pg-hist__day {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  line-height: 1;
+}
+.pg-hist__wd {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pg-hist__chev {
+  color: var(--text-3);
+  flex: none;
+}
+
+@media (max-width: 340px) {
+  .pg-weight__value {
+    font-size: 48px;
+  }
+  .pg-stat__value {
+    font-size: var(--fs-xl);
+  }
+  .pg-stat + .pg-stat {
+    padding-left: var(--s-2);
+  }
+  .pg-ex__val {
+    min-width: 66px;
+  }
+}
+
+.pg-log .list-row__sub {
+  white-space: normal;
+  overflow: visible;
+  line-height: 1.35;
+}
+
+.pg-wrap {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+}
+
+@media (max-width: 380px) {
+  .pg-sheet__grid .stepper__value {
+    font-size: 22px;
+  }
+  .pg-sheet__grid .stepper__btn {
+    width: 32px;
+  }
+}

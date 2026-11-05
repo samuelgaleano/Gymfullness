@@ -1,0 +1,319 @@
+/* ================= Workout summary (src/screens/summary/*) — class prefix: sm- ================= */
+
+.sm {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding-bottom: 0;
+}
+.sm--tabs {
+  padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom) + var(--s-8));
+}
+.sm-head {
+  padding: var(--s-4) var(--s-1) var(--s-5);
+}
+.sm-head__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--s-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--accent-text);
+}
+.sm-head__badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.sm-head__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.sm-head__sub {
+  margin-top: 6px;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+.sm-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-6);
+  flex: 1;
+  padding-bottom: var(--s-6);
+}
+
+/* ---------- Stats ---------- */
+.sm-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+.sm-stat {
+  padding: var(--s-3) var(--s-3) var(--s-3);
+  border-radius: var(--r-lg);
+  min-width: 0;
+}
+.sm-stat__value {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.sm-stat__label {
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+  font-weight: 500;
+}
+.sm-stat--pr .sm-stat__value {
+  color: var(--pr);
+}
+
+/* ---------- PRs ---------- */
+.sm-pr {
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+  border-color: var(--pr);
+  background: linear-gradient(160deg, var(--pr-soft), transparent 70%), var(--glass);
+}
+.sm-pr__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pr);
+  font-weight: 700;
+}
+.sm-pr__list {
+  list-style: none;
+  margin: var(--s-3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.sm-pr__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--s-3);
+  align-items: baseline;
+}
+.sm-pr__name {
+  font-weight: 600;
+}
+.sm-pr__val {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  color: var(--pr);
+}
+.sm-pr__sub {
+  grid-column: 1 / -1;
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+
+/* ---------- Blocks ---------- */
+.sm-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.sm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sm-ex {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.sm-exc {
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+}
+.sm-exc__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-2);
+}
+.sm-exc__name {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  min-width: 0;
+}
+.sm-exc__meta {
+  flex: none;
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+.sm-sets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sm-set {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 40px;
+  border-top: 1px solid var(--glass-border);
+}
+.sm-set:first-child {
+  border-top: 0;
+}
+.sm-set__n {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--glass-strong);
+  color: var(--text-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  flex: none;
+}
+.sm-set__v {
+  font-weight: 600;
+  flex: 1;
+}
+.sm-set__pr {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--r-pill);
+  background: var(--pr-soft);
+  color: var(--pr);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+.sm-set--pr .sm-set__v {
+  color: var(--pr);
+}
+.sm-set--pr .sm-set__n {
+  background: var(--pr);
+  color: var(--text-on-accent);
+}
+
+/* ---------- Feeling ---------- */
+.sm-feel {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--s-2);
+}
+.sm-feel__opt {
+  height: 52px;
+  border-radius: var(--r-md);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--text-2);
+  transition: transform var(--dur-1) var(--ease), background var(--dur-2), color var(--dur-2);
+}
+.sm-feel__opt:active {
+  transform: scale(0.95);
+}
+.sm-feel__opt[aria-checked='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+.sm-feel__legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  padding: 0 var(--s-1);
+}
+.sm-feel__legend span:nth-child(2) {
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+/* ---------- Actions ---------- */
+.sm-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+.sm-actions .btn {
+  flex-direction: column;
+  padding: var(--s-3) var(--s-2);
+  font-size: var(--fs-sm);
+  gap: 6px;
+  min-height: 78px;
+  white-space: normal;
+  line-height: 1.15;
+  text-align: center;
+  border-radius: var(--r-lg);
+}
+
+/* ---------- Guest prompt ---------- */
+.sm-guest {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-2) var(--s-4) var(--s-4);
+  border-radius: var(--r-lg);
+}
+.sm-guest__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  background: var(--rest-soft);
+  color: var(--rest);
+  flex: none;
+}
+.sm-guest__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-2);
+}
+.sm-guest__title {
+  font-weight: 700;
+}
+.sm-guest__text {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+/* ---------- Bottom CTA ---------- */
+.sm-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  margin: 0 calc(-1 * var(--s-4));
+  padding: var(--s-4) var(--s-4) calc(var(--safe-bottom) + var(--s-3));
+  background: linear-gradient(to top, var(--bg) 60%, transparent);
+}
+.sm-confirm-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  width: 100%;
+}
+.sm-confirm-text {
+  margin: 0 0 var(--s-2);
+}

@@ -1,0 +1,216 @@
+/* PlanWizard — class prefix rt-wiz */
+.rt-wiz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  min-width: 0;
+}
+.rt-wiz--card {
+  border-radius: var(--r-xl);
+  padding: var(--s-5);
+}
+.rt-wiz__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+}
+.rt-wiz__dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.rt-wiz__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--glass-strong);
+  transition: width var(--dur-3) var(--ease), background var(--dur-2);
+}
+.rt-wiz__dot.is-done {
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.rt-wiz__dot.is-current {
+  width: 26px;
+  background: var(--accent);
+}
+.rt-wiz__page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  animation: rt-wiz-in var(--dur-3) var(--ease) both;
+}
+@keyframes rt-wiz-in {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rt-wiz__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  outline: none;
+}
+.rt-wiz__hint {
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  margin-top: calc(var(--s-1) * -1);
+}
+.rt-wiz__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+.rt-wiz__option {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 72px;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-lg);
+  text-align: left;
+  width: 100%;
+  transition: transform var(--dur-1) var(--ease), background var(--dur-2), border-color var(--dur-2);
+}
+.rt-wiz__option:active {
+  transform: scale(0.985);
+}
+.rt-wiz__option[aria-checked='true'] {
+  border-color: var(--accent);
+  background: linear-gradient(160deg, var(--accent-soft), transparent 80%), var(--glass);
+}
+.rt-wiz__option-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rt-wiz__option-label {
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  letter-spacing: -0.01em;
+}
+.rt-wiz__option-desc {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  line-height: 1.3;
+}
+.rt-wiz__check {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--text-3);
+  color: var(--text-on-accent);
+  transition: background var(--dur-2), border-color var(--dur-2);
+}
+.rt-wiz__option[aria-checked='true'] .rt-wiz__check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.rt-wiz__preview {
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  margin-top: var(--s-2);
+}
+.rt-wiz__preview-head {
+  display: flex;
+  gap: var(--s-3);
+  align-items: flex-start;
+}
+.rt-wiz__spark {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  flex: none;
+}
+.rt-wiz__preview-name {
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  letter-spacing: -0.01em;
+}
+.rt-wiz__preview-scheme {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  margin-top: 2px;
+}
+.rt-wiz__days {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.rt-wiz__day {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) 0;
+}
+.rt-wiz__day + .rt-wiz__day {
+  border-top: 1px solid var(--glass-border);
+}
+.rt-wiz__day-n {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--glass-strong);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  flex: none;
+}
+.rt-wiz__day-name {
+  display: block;
+  font-weight: 600;
+}
+.rt-wiz__day-focus {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+.rt-wiz__day-count {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  flex: none;
+}
+.rt-wiz__nav {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  margin-top: var(--s-2);
+}
+.rt-wiz__cta {
+  flex: 1;
+}
+
+/* In a sheet the primary action must stay reachable without scrolling. */
+.rt-wiz--embedded .rt-wiz__nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin-top: 0;
+  padding: var(--s-3) 0 calc(var(--safe-bottom, 0px) + var(--s-3));
+  background: linear-gradient(to top, var(--glass-solid) 75%, transparent);
+}
