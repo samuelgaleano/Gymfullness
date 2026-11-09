@@ -492,7 +492,7 @@ const round2 = (v: number) => Math.round(v * 100) / 100
  * context of the current set. Pure and fast; never throws.
  */
 export function parseUtterance(text: string, ctx: VoiceContext): ParsedVoice {
-  const raw = (text ?? '').trim()
+  const raw = typeof text === 'string' ? text.trim() : ''
   try {
     return parseInner(raw, ctx)
   } catch {

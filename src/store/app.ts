@@ -23,6 +23,8 @@ import type {
   WorkoutSession,
 } from '@/lib/types'
 import { uid } from '@/lib/id'
+import { sanitizeActiveSession } from './sanitize'
+import { validateImport } from '@/screens/profile/importValidate'
 import * as engine from '@/lib/workout/engine'
 import { EXERCISES } from '@/data/exercises'
 
@@ -322,11 +324,33 @@ export const useApp = create<AppState>()(
         return Object.fromEntries(Object.entries(rest).filter(([, v]) => typeof v !== 'function')) as Partial<AppState>
       },
       merge: (persisted, current) => {
-        const p = (persisted ?? {}) as Partial<AppState>
-        return { ...current, ...p, settings: { ...current.settings, ...(p.settings ?? {}) } }
+        if (!persisted || typeof persisted !== 'object' || Array.isArray(persisted)) return current
+        const p = persisted as Partial<AppState>
+        // Validate collections with the same tolerant validator used for backups: bad items are dropped.
+        const checked = validateImport({ version: 1, ...p }, current.settings)
+        const base = checked.ok ? checked.data : null
+        return {
+          ...current,
+          ...(base
+            ? {
+                // validateImport forces onboarded:true (right for backups); here keep what was really stored
+                profile: { ...base.profile, onboarded: (p.profile as Profile | undefined)?.onboarded === true },
+                settings: base.settings,
+                plan: base.plan,
+                routines: base.routines,
+                sessions: base.sessions,
+                bodyLogs: base.bodyLogs,
+                customExercises: base.customExercises,
+              }
+            : {}),
+          activeSession: sanitizeActiveSession(p.activeSession),
+        }
       },
-      onRehydrateStorage: () => () => {
-        useApp.setState({ hydrated: true })
+      onRehydrateStorage: () => (state, error) => {
+        if (error) console.warn('[store] rehydrate failed, starting clean:', error)
+        // `useApp` may not be assigned yet when storage is synchronous (memory fallback): defer.
+        queueMicrotask(() => useApp.setState({ hydrated: true }))
+        void state
       },
     },
   ),

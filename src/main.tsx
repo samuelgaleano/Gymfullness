@@ -4,12 +4,15 @@ import './styles/font.css'
 import './styles/base.css'
 import './ui/ui.css'
 import { App } from './App'
+import { ErrorBoundary } from './ui/ErrorBoundary'
 import { recoverFromStaleChunks, registerPWA } from './pwa'
 import { initAuth } from './store/auth'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )
 
